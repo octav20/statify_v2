@@ -1,0 +1,48 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SongItem from '../components/SongItem.astro';
+import { getTopTracks } from '../lib/spotify';
+
+const accessTokenCookie = Astro.cookies.get('spotify_token');
+const accessToken = accessTokenCookie?.value;
+if (!accessToken) {
+  throw new Error('Access token is missing. Please log in.');
+}
+// Fetch top tracks for the last 4 weeks
+const params = new URLSearchParams(Astro.request.url.split('?')[1] || '');
+const term = params.get('term') || 'short_term';
+console.log(`Fetching top tracks for term: ${term}`);
+const songs = await getTopTracks(accessToken, term);
+---
+
+<Layout>
+  <div
+    class="h-fit
+      flex
+      justify-center
+          bg-gradient-to-b
+          from-emerald-800
+          p-6`"
+  >
+    <div>
+      <h1 class="font-bold text-3xl text-center m-16">
+        Your Songs (Last 4 weeks)
+      </h1>
+
+      <div
+        class="grid
+      grid-cols-2
+      sm:grid-cols-3
+      md:grid-cols-5
+      lg:grid-cols-4
+      xl:grid-cols-5
+      2xl:grid-cols-8
+      gap-4
+      
+      m-4"
+      >
+        {songs.map((item: any) => <SongItem key={item.id} data={item} />)}
+      </div>
+    </div>
+  </div>
+</Layout>

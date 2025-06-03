@@ -1,0 +1,51 @@
+---
+const { data } = Astro.props;
+---
+
+<div
+  class="relative
+        group
+        flex
+        flex-col
+        items-center
+        justify-center
+        rounded-md
+        overflow-hidden
+        gap-x-4
+        bg-neutral-400/5
+        cursor-pointer
+        hover:bg-neutral-400/10
+        transition
+        p-3"
+>
+  <div
+    class="relative
+            aspect-square
+            w-full
+            h-full
+            rounded-md
+            overflow-hidden"
+  >
+    <img
+      class="object-cover"
+      src={data.album.images[1].url || '/liked.png'}
+      alt="Image"
+      sizes="(max-width: 768px) 100vw"
+    />
+  </div>
+  <div class="flex flex-col items-start w-full pt-4 gap-y-1">
+    <p class="font-semibold truncate w-full">{data.name}</p>
+    <p
+      class="text-neutral-400
+              text-sm
+              pb-4
+              w-full
+              truncate"
+    >
+      {data.artists[0].name}
+    </p>
+  </div>
+  <div class="absolute
+          bottom-24
+          right-5"></div>
+</div>

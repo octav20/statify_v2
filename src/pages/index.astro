@@ -2,10 +2,31 @@
 import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
 
+const scope = 'user-top-read';
+const redirectUri = import.meta.env.SPOTIFY_REDIRECT_URI;
+const clientId = import.meta.env.SPOTIFY_CLIENT_ID;
+
+const authUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`;
+
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
-	<Welcome />
+  <div class="container-md">
+    <div class="text-center text-gray-400 mt-4">
+      <p>
+        Statify is a personal music statistics app that uses the Spotify API.
+      </p>
+      <p>It is not affiliated with Spotify.</p>
+    </div>
+    <div class="flex flex-col items-center justify-center h-screen">
+      <a
+        class="bg-emerald-600 cursor-pointer text-white px-4 py-2 rounded-md mt-4 hover:bg-emerald-700 transition-colors"
+        href={authUrl}
+      >
+        Login with Spotify
+      </a>
+    </div>
+  </div>
 </Layout>

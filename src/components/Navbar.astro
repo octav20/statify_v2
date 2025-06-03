@@ -1,0 +1,75 @@
+---
+const { pathname } = Astro.url;
+
+const routes = [
+  {
+    href: `/topTracks`,
+    label: 'Your songs',
+    active: [
+      '/songs',
+      '/songs/short_term',
+      '/songs/medium_term',
+      '/songs/long_term',
+      '/topTracks',
+    ].find((path: string) => pathname === path),
+  },
+  {
+    href: `/artists`,
+    label: 'Your artists',
+    active: [
+      '/artists',
+      '/artists/short_term',
+      '/artists/medium_term',
+      '/artists/long_term',
+    ].find((path: string) => pathname === path),
+  },
+  {
+    href: `/genres`,
+    label: 'Your genres',
+    active: [
+      '/genres',
+      '/genres/short_term',
+      '/genres/medium_term',
+      '/genres/long_term',
+    ].find((path: string) => pathname === path),
+  },
+];
+---
+
+<div
+  class="border-b border-gray-800 px-4 py-2 flex items-center justify-between"
+>
+  <nav
+    class="grid-cols-12 flex justify-evenly items-center w-full max-w-6xl mx-auto"
+  >
+    <div class="col-span-2 flex items-center">
+      <a
+        href="/"
+        class="text-3xl font-bold text-emerald-600 transition-colors hover:text-emerald-700"
+        >Statify</a
+      >
+    </div>
+    <ul class="col-span-7 flex space-x-4 lg:space-x-6">
+      {
+        routes.map((route) => (
+          <li class="">
+            <a
+              href={route.href}
+              class={`text-lg transition-colors p-2 hover:border-b-2 hover:border-emerald-600 font-medium transition-colors hover:text-emerald-600 ${route.active ? 'text-emerald-600' : 'text-gray-300'}`}
+            >
+              {route.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <a
+      class="col-span-3 text-lg align-self-end cursor-pointer bg-white text-gray-800 px-4 py-2 rounded-md shadow-md hover:bg-gray-300 transition-colors"
+      type="button"
+      href="/api/logout"
+    >
+      Logout
+    </a>
+  </nav>
+</div>
