@@ -1,7 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SongItem from '../components/SongItem.astro';
-import { getTopTracks } from '../lib/spotify';
+import PieChart from '../components/PieChart.jsx';
+import { getTopGenres } from '../lib/spotify';
 
 const accessTokenCookie = Astro.cookies.get('spotify_token');
 const accessToken = accessTokenCookie?.value;
@@ -12,8 +13,8 @@ if (!accessToken) {
 const params = new URLSearchParams(Astro.request.url.split('?')[1] || '');
 const term = params.get('term') || 'short_term';
 console.log(`Fetching top tracks for term: ${term}`);
-const songs = await getTopTracks(accessToken, term);
-console.log(songs);
+const genres = await getTopGenres(accessToken, term);
+console.log(genres);
 ---
 
 <Layout>
@@ -27,7 +28,7 @@ console.log(songs);
   >
     <div>
       <h1 class="font-bold text-3xl text-center m-10">
-        Your Songs ({
+        Your Genres ({
           term === 'short_term'
             ? 'Last 4 weeks'
             : term === 'medium_term'
@@ -38,19 +39,19 @@ console.log(songs);
       <div>
         <div class="flex justify-center mb-4">
           <a
-            href="/topTracks?term=short_term"
+            href="/topGenres?term=short_term"
             class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded mr-2"
           >
             Last 4 Weeks
           </a>
           <a
-            href="/topTracks?term=medium_term"
+            href="/topGenres?term=medium_term"
             class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded mr-2"
           >
             Last 6 Months
           </a>
           <a
-            href="/topTracks?term=long_term"
+            href="/topGenres?term=long_term"
             class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded"
           >
             All Time
@@ -58,19 +59,10 @@ console.log(songs);
         </div>
       </div>
 
-      <div
-        class="grid
-      grid-cols-2
-      sm:grid-cols-3
-      md:grid-cols-5
-      lg:grid-cols-4
-      xl:grid-cols-5
-      2xl:grid-cols-8
-      gap-4
-      
-      m-4"
-      >
-        {songs.map((item: any) => <SongItem key={item.id} data={item} />)}
+      <div class="flex flex-col items-center justify-center">
+        <div class="w-full flex flex-col items-center justify-center">
+          <PieChart labels={genres.labels} data={genres.data} client:load />
+        </div>
       </div>
     </div>
   </div>

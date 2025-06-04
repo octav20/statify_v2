@@ -5,35 +5,21 @@ const routes = [
   {
     href: `/topTracks`,
     label: 'Your songs',
-    active: [
-      '/songs',
-      '/songs/short_term',
-      '/songs/medium_term',
-      '/songs/long_term',
-      '/topTracks',
-    ].find((path: string) => pathname === path),
+    active: ['/topTracks'].find((path: string) => pathname === path),
   },
   {
-    href: `/artists`,
+    href: `/topArtists`,
     label: 'Your artists',
-    active: [
-      '/artists',
-      '/artists/short_term',
-      '/artists/medium_term',
-      '/artists/long_term',
-    ].find((path: string) => pathname === path),
+    active: ['/topArtists'].find((path: string) => pathname === path),
   },
   {
-    href: `/genres`,
+    href: `/topGenres`,
     label: 'Your genres',
-    active: [
-      '/genres',
-      '/genres/short_term',
-      '/genres/medium_term',
-      '/genres/long_term',
-    ].find((path: string) => pathname === path),
+    active: ['/topGenres'].find((path: string) => pathname === path),
   },
 ];
+
+const isLoggedIn = Astro.cookies.get('spotify_token')?.value;
 ---
 
 <div
@@ -55,7 +41,7 @@ const routes = [
           <li class="">
             <a
               href={route.href}
-              class={`text-lg transition-colors p-2 hover:border-b-2 hover:border-emerald-600 font-medium transition-colors hover:text-emerald-600 ${route.active ? 'text-emerald-600' : 'text-gray-300'}`}
+              class={`text-lg transition-colors p-2 hover:border-emerald-600  hover:border-b-2 font-medium  hover:text-emerald-600 ${route.active ? 'text-emerald-600 border-b-2 border-emerald-600' : 'text-gray-300'}`}
             >
               {route.label}
             </a>
@@ -63,13 +49,16 @@ const routes = [
         ))
       }
     </ul>
-
-    <a
-      class="col-span-3 text-lg align-self-end cursor-pointer bg-white text-gray-800 px-4 py-2 rounded-md shadow-md hover:bg-gray-300 transition-colors"
-      type="button"
-      href="/api/logout"
-    >
-      Logout
-    </a>
+    {
+      isLoggedIn ? (
+        <a
+          class="col-span-3 text-lg align-self-end cursor-pointer bg-white text-gray-800 px-4 py-2 rounded-md shadow-md hover:bg-gray-300 transition-colors"
+          type="button"
+          href="/api/logout"
+        >
+          Logout
+        </a>
+      ) : null
+    }
   </nav>
 </div>

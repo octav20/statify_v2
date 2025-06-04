@@ -1,7 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SongItem from '../components/SongItem.astro';
-import { getTopTracks } from '../lib/spotify';
+import { getTopArtists } from '../lib/spotify';
+import ArtistItem from '../components/ArtistItem.astro';
 
 const accessTokenCookie = Astro.cookies.get('spotify_token');
 const accessToken = accessTokenCookie?.value;
@@ -12,8 +13,7 @@ if (!accessToken) {
 const params = new URLSearchParams(Astro.request.url.split('?')[1] || '');
 const term = params.get('term') || 'short_term';
 console.log(`Fetching top tracks for term: ${term}`);
-const songs = await getTopTracks(accessToken, term);
-console.log(songs);
+const artists = await getTopArtists(accessToken, term);
 ---
 
 <Layout>
@@ -27,7 +27,7 @@ console.log(songs);
   >
     <div>
       <h1 class="font-bold text-3xl text-center m-10">
-        Your Songs ({
+        Your Artists ({
           term === 'short_term'
             ? 'Last 4 weeks'
             : term === 'medium_term'
@@ -38,19 +38,19 @@ console.log(songs);
       <div>
         <div class="flex justify-center mb-4">
           <a
-            href="/topTracks?term=short_term"
+            href="/topArtists?term=short_term"
             class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded mr-2"
           >
             Last 4 Weeks
           </a>
           <a
-            href="/topTracks?term=medium_term"
+            href="/topArtists?term=medium_term"
             class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded mr-2"
           >
             Last 6 Months
           </a>
           <a
-            href="/topTracks?term=long_term"
+            href="/topArtists?term=long_term"
             class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded"
           >
             All Time
@@ -70,7 +70,7 @@ console.log(songs);
       
       m-4"
       >
-        {songs.map((item: any) => <SongItem key={item.id} data={item} />)}
+        {artists.map((item: any) => <ArtistItem key={item.id} data={item} />)}
       </div>
     </div>
   </div>
