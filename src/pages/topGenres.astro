@@ -7,7 +7,7 @@ import { getTopGenres } from '../lib/spotify';
 const accessTokenCookie = Astro.cookies.get('spotify_token');
 const accessToken = accessTokenCookie?.value;
 if (!accessToken) {
-  throw new Error('Access token is missing. Please log in.');
+  return Astro.redirect('/');
 }
 // Fetch top tracks for the last 4 weeks
 const params = new URLSearchParams(Astro.request.url.split('?')[1] || '');
